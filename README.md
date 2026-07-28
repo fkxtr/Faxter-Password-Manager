@@ -2,17 +2,19 @@
 
 A simple terminal-based password manager written in Python.
 
-This project allows you to generate strong passwords, encrypt them using Fernet, and store them securely inside an encrypted vault protected by a master password.
+Faxter Password Manager allows you to generate strong passwords, encrypt them using Fernet, and store them securely inside an encrypted vault protected by a master password. The project was built as a learning exercise to practice cryptography, file handling, hashing, and terminal application development with Python.
+
+---
 
 ## Features
 
-- Generate secure random passwords.
-- Store passwords in an encrypted vault.
-- Password encryption using Fernet (AES-based symmetric encryption).
+- Generate cryptographically secure passwords.
+- Encrypt every stored password using Fernet.
 - Master password authentication.
-- Search stored passwords.
-- Delete saved passwords.
-- Customizable terminal theme and menu colors.
+- Search saved passwords.
+- Delete stored passwords.
+- Simple terminal interface.
+- Customizable terminal colors.
 
 ---
 
@@ -20,7 +22,7 @@ This project allows you to generate strong passwords, encrypt them using Fernet,
 
 - Python 3.10 or newer
 
-Install the required dependency:
+Install the required dependencies:
 
 ```bash
 pip install cryptography colorama
@@ -42,96 +44,23 @@ Enter the project folder:
 cd Faxter-Password-Manager
 ```
 
-Run the program:
+Before running the password manager, execute the setup scripts:
+
+```bash
+python keymaster.py
+python passwordmaster.py
+```
+
+These scripts will:
+
+- Generate the encryption key (`secret.key`)
+- Create and hash your master password (`master.hash`)
+
+Once the setup is complete, launch the application:
 
 ```bash
 python main.py
 ```
-
-Replace `main.py` with the actual filename if your script has a different name.
-
----
-
-## Important
-
-The program must be executed from the project's directory.
-
-Example:
-
-```text
-C:
-└── Users
-    └── YourUser
-        └── Desktop
-            └── Faxter-Password-Manager
-                ├── main.py
-                ├── secret.key
-                ├── master.hash
-                └── passwords
-```
-
-Open a terminal inside this folder or navigate to it using:
-
-```bash
-cd path/to/Faxter-Password-Manager
-```
-
-Running the script from another directory may prevent it from locating the encryption key and password vault.
-
----
-
-## First Launch
-
-When running the application for the first time:
-
-- A new Fernet encryption key (`secret.key`) is generated.
-- You will be prompted to create a master password.
-- The SHA-256 hash of the master password is stored in `master.hash`.
-- An encrypted password vault will be created automatically when the first password is saved.
-
----
-
-## How It Works
-
-### Password Generation
-
-The application generates random passwords using Python's `secrets` module together with:
-
-- Uppercase letters
-- Lowercase letters
-- Numbers
-- Symbols
-
-This provides cryptographically secure random passwords.
-
-### Encryption
-
-Every password is encrypted before being stored.
-
-The application uses:
-
-- Fernet encryption from the `cryptography` library
-- A unique encryption key stored in `secret.key`
-
-The encrypted passwords are saved inside:
-
-```text
-passwords/vault.enc
-```
-
-The vault does not contain readable text. Every entry is encrypted before being written to disk.
-
-### Master Password
-
-The master password is never stored in plain text.
-
-Instead:
-
-1. The password is hashed using SHA-256.
-2. Only the resulting hash is saved in `master.hash`.
-3. Each time the Password Vault is opened, the entered password is hashed again and compared with the stored hash.
-
-If the hashes match, access to the vault is granted.
 
 ---
 
@@ -141,6 +70,8 @@ If the hashes match, access to the vault is granted.
 Faxter-Password-Manager/
 │
 ├── main.py
+├── keymaster.py
+├── passwordmaster.py
 ├── secret.key
 ├── master.hash
 ├── passwords/
@@ -150,30 +81,70 @@ Faxter-Password-Manager/
 
 ---
 
-## Files
+## How It Works
 
-### `secret.key`
+### Initial Setup
 
-Stores the Fernet encryption key used to encrypt and decrypt the password vault.
+Before using the application, you must run:
 
-### `master.hash`
+```bash
+python keymaster.py
+python passwordmaster.py
+```
 
-Contains the SHA-256 hash of the master password.
+`keymaster.py` generates the Fernet encryption key used to encrypt and decrypt your password vault.
 
-### `vault.enc`
+`passwordmaster.py` asks you to create a master password and stores only its SHA-256 hash inside `master.hash`.
 
-Contains every saved password in encrypted form.
+This setup only needs to be completed once.
 
 ---
 
-## Security Notes
+### Running the Application
 
-- Passwords are never stored in plain text.
-- The master password itself is never stored.
-- All stored entries are encrypted before being written to disk.
-- Random passwords are generated using Python's `secrets` module.
+Start the password manager with:
 
-This project is intended for educational purposes and as a demonstration of Python file encryption, hashing, and terminal application development.
+```bash
+python main.py
+```
+
+After entering the correct master password, you can use the application's menu to:
+
+- Generate secure passwords
+- Save new passwords
+- View saved entries
+- Search for passwords
+- Delete existing entries
+
+---
+
+## Security
+
+The project uses several security mechanisms:
+
+- Fernet encryption from the `cryptography` library.
+- SHA-256 hashing for the master password.
+- Secure random password generation using Python's `secrets` module.
+- Passwords are encrypted before being written to disk.
+- The master password is never stored in plain text.
+
+Encrypted passwords are stored in:
+
+```text
+passwords/vault.enc
+```
+
+The encryption key is stored in:
+
+```text
+secret.key
+```
+
+The master password hash is stored in:
+
+```text
+master.hash
+```
 
 ---
 
@@ -183,11 +154,20 @@ This project is intended for educational purposes and as a demonstration of Pyth
 - Cryptography (Fernet)
 - Colorama
 - Hashlib
-- Getpass
 - Secrets
+- Getpass
+
+---
+
+## Notes
+
+- Run the program from the project directory.
+- Do not delete `secret.key`, `master.hash`, or the `passwords` folder after creating them.
+- Losing `secret.key` means the encrypted vault can no longer be decrypted.
+- This project is intended for educational purposes and to demonstrate encryption, hashing, and secure password storage in Python.
 
 ---
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is released under the MIT License.
