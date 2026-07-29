@@ -35,7 +35,7 @@ pip install cryptography colorama
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Faxter-Password-Manager.git
+git clone https://github.com/fkxtr/Faxter-Password-Manager.git
 ```
 
 Enter the project folder:
